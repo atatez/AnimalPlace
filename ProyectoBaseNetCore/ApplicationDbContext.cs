@@ -35,10 +35,68 @@ namespace ProyectoBaseNetCore
             modelBuilder.Entity<Catalog>().ToTable("Catalogs", "CAT");
             modelBuilder.Entity<CatalogItem>().ToTable("CatalogItems", "CAT");
 
+            // Configuración de las relaciones entre Clientes y Mascotas
             modelBuilder.Entity<Clientes>()
-                .HasMany(cliente => cliente.Mascotas)
-                .WithOne(mascota => mascota.Cliente)
-                .HasForeignKey(mascota => mascota.IdCliente);
+                .HasMany(c => c.Mascotas)
+                .WithOne(m => m.Cliente)
+                .HasForeignKey(m => m.IdCliente);
+
+            // Configuración de las relaciones entre Enfermedad y TipoEnfermedad
+            modelBuilder.Entity<Enfermedad>()
+                .HasMany(e => e.Tipos)
+                .WithOne(t => t.Enfermedad)
+                .HasForeignKey(t => t.IdEnfermedad);
+
+            // Configuración de las relaciones entre Usuario, UserRol y Rol
+            modelBuilder.Entity<UserRol>()
+                .HasKey(ur => new { ur.IdUser, ur.IdRol });
+
+            modelBuilder.Entity<UserRol>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.IdUser);
+
+            modelBuilder.Entity<UserRol>()
+                .HasOne(ur => ur.Rol)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.IdRol);
+
+            // Configuración de las relaciones entre FichaSintoma, Mascotas, Resultado y User
+            modelBuilder.Entity<FichaSintoma>()
+                .HasMany(fs => fs.Detalles)
+                .WithOne(d => d.FichaSintomas)
+                .HasForeignKey(d => d.IdFicha);
+
+            modelBuilder.Entity<Mascotas>()
+                .HasMany(m => m.FichaSintomas)
+                .WithOne(fs => fs.Mascotas)
+                .HasForeignKey(fs => fs.IdMascotas);
+
+            modelBuilder.Entity<Resultado>()
+                .HasMany(r => r.FichaSintomas)
+                .WithOne(fs => fs.Resultado)
+                .HasForeignKey(fs => fs.IdResultado);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.FichaSintomas)
+                .WithOne(fs => fs.User)
+                .HasForeignKey(fs => fs.IdUser);
+
+            // Configuración de las relaciones entre HistoriaClinica, Mascotas, Resultado y User
+            modelBuilder.Entity<HistoriaClinica>()
+            .HasOne(hc => hc.Mascotas)
+            .WithMany(m => m.HistoriaClinicas)
+            .HasForeignKey(hc => hc.IdMascotas);
+
+            modelBuilder.Entity<HistoriaClinica>()
+                .HasOne(hc => hc.Resultado)
+                .WithMany(r => r.HistoriaClinicas)
+                .HasForeignKey(hc => hc.IdResultado);
+
+            modelBuilder.Entity<HistoriaClinica>()
+                .HasOne(hc => hc.User)
+                .WithMany(u => u.HistoriaClinicas)
+                .HasForeignKey(hc => hc.IdUser);
         }
 
         public DbSet<Form> Forms { get; set; }
@@ -51,5 +109,15 @@ namespace ProyectoBaseNetCore
         public DbSet<CatalogItem> CatalogItems { get; set; }
         public DbSet<Clientes> Clientes { get; set; }
         public DbSet<Mascotas> Mascotas { get; set; }
+        public DbSet<FichaSintoma> FichaSintomas { get; set; }
+        public DbSet<HistoriaClinica> HistoriaClinica { get; set; }
+        public DbSet<Resultado> Resultado { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<UserRol> UserRol { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<TipoEnfermedad> TipoEnfermedad { get; set; }
+        public DbSet<Enfermedad> Enfermedad { get; set; }
+        public DbSet<Detalle> Detalles { get; set; }
+      
     }
 }

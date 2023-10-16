@@ -15,5 +15,8 @@ namespace ProyectoBaseNetCore.Entities
         public string Apellidos { get; set; }
         public string Direccion { get; set; }
         public int Rol { get; set; }
+        public List<UserRol> UserRoles { get; set; }
+        public List<FichaSintoma> FichaSintomas { get; set; }
+        public List<HistoriaClinica> HistoriaClinicas { get; set; }
     }
 }

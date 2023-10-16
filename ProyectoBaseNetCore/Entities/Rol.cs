@@ -12,5 +12,6 @@ namespace ProyectoBaseNetCore.Entities
         public long IdRol { get; set; }
         public string NombreRol { get; set; }
         public string Descripcion { get; set; }
+        public List<UserRol> UserRoles { get; set; }
     }
 }

@@ -11,9 +11,11 @@ namespace ProyectoBaseNetCore.Entities
         public long? IdFicha { get; set; }
         public FichaSintoma FichaSintoma { get; set; }
         public DateTime FechaResultado { get; set; }
-        public string Resultad { get; set; }
+        public string Resultados { get; set; }
         public string Descripcion { get; set; }
-        public string Tratamiento { get; set; }
-        public string Observaciones { get; set; }
+        public string IdEnfermedad { get; set; }
+        public Enfermedad Enfermedad { get; set; }
+        public List<FichaSintoma> FichaSintomas { get; set; }
+        public List<HistoriaClinica> HistoriaClinicas { get; set; }
     }
 }

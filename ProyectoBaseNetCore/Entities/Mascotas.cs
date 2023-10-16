@@ -8,6 +8,7 @@ namespace ProyectoBaseNetCore.Entities
     {
         [Key]
         public long IdMascotas { get; set; }
+        public List<FichaSintoma> FichaSintomas { get; set; }
         public string NombreMascota { get; set; }
         public string Raza { get; set; }
         public string Sexo { get; set; }
@@ -17,5 +18,7 @@ namespace ProyectoBaseNetCore.Entities
         public string Direccion { get; set; }
         public long? IdCliente { get; set; }
         public Clientes Cliente { get; set; }
+        public List<HistoriaClinica> HistoriaClinicas { get; set; }
+
     }
 }
