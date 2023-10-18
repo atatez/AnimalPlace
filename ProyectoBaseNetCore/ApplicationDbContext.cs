@@ -8,6 +8,8 @@ namespace ProyectoBaseNetCore
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        private readonly IConfiguration _configuration;
+
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -118,6 +120,13 @@ namespace ProyectoBaseNetCore
         public DbSet<TipoEnfermedad> TipoEnfermedad { get; set; }
         public DbSet<Enfermedad> Enfermedad { get; set; }
         public DbSet<Detalle> Detalles { get; set; }
-      
+
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+      => optionsBuilder
+           
+           .UseSqlServer("Data Source=localhost;Initial Catalog=VetAnimal;Integrated Security=True;TrustServerCertificate=True");
     }
+
+    
 }

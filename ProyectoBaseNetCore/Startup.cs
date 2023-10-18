@@ -54,7 +54,7 @@ namespace ProyectoBaseNetCore
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("defaultConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
             //Autenticacion
