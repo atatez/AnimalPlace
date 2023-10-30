@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoBaseNetCore.Entities
 {
-    public class Clientes : CrudEntities
+    [Table("Clientes",Schema ="CAT")]
+    public class Cliente : CrudEntities
     {
         [Key]
         public long IdCliente{ get; set; }
@@ -12,10 +12,10 @@ namespace ProyectoBaseNetCore.Entities
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Telefono { get; set; }
+        public string Correo { get; set; }
         [MaxLength(350)]
         public string Direccion { get; set; }
-
-        public List<Mascotas> Mascotas { get; set; }
+        public virtual ICollection<Mascota> Mascotas { get; set; }
     }
 }
     

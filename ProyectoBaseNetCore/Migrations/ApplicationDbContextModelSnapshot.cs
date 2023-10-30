@@ -229,7 +229,7 @@ namespace ProyectoBaseNetCore.Migrations
                     b.ToTable("Users", "SEG");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Clientes", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Cliente", b =>
                 {
                     b.Property<long>("IdCliente")
                         .ValueGeneratedOnAdd()
@@ -241,6 +241,9 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Apellidos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
@@ -274,30 +277,6 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<string>("Nombres")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
                     b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
@@ -315,28 +294,22 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasKey("IdCliente");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", "CAT");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Detalle", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.CodigosSecuencia", b =>
                 {
-                    b.Property<long>("IdDetalle")
+                    b.Property<long>("IdCodigosSecuencia")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdDetalle"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdCodigosSecuencia"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Alopecia")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Anemia")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DebilidadTrenInf")
-                        .HasColumnType("int");
+                    b.Property<string>("Codigo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FechaEliminacion")
                         .HasColumnType("datetime2");
@@ -346,12 +319,6 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Fiebre")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("IdFicha")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("IpEliminacion")
                         .HasMaxLength(350)
@@ -365,29 +332,8 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
+                    b.Property<int>("UltimoNumero")
+                        .HasColumnType("int");
 
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
@@ -401,11 +347,9 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.HasKey("IdDetalle");
+                    b.HasKey("IdCodigosSecuencia");
 
-                    b.HasIndex("IdFicha");
-
-                    b.ToTable("Detalles");
+                    b.ToTable("Codigos", "CAT");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.DinamicQuestionEntities.Catalog", b =>
@@ -642,8 +586,8 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ConteoDiagnosticoEnfermedad")
-                        .HasColumnType("int");
+                    b.Property<string>("CodigoEnfermedad")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FechaEliminacion")
                         .HasColumnType("datetime2");
@@ -652,9 +596,6 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaUltimoDiagn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IpEliminacion")
@@ -669,32 +610,8 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<string>("NombreEnfermedad")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
@@ -710,16 +627,16 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasKey("IdEnfermedad");
 
-                    b.ToTable("Enfermedad");
+                    b.ToTable("Enfermedad", "CAT");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaSintoma", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaDetalle", b =>
                 {
-                    b.Property<long>("IdFicha")
+                    b.Property<long>("IdDetalle")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdFicha"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdDetalle"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
@@ -733,13 +650,10 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("IdMascotas")
+                    b.Property<long>("IdFicha")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("IdResultado")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdUser")
+                    b.Property<long>("IdSintoma")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IpEliminacion")
@@ -754,32 +668,67 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SvrdadSntmas")
+                    b.Property<string>("Observacion")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioEliminacion")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.Property<string>("UsuarioModificacion")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.Property<string>("UsuarioRegistro")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.HasKey("IdDetalle");
+
+                    b.HasIndex("IdFicha");
+
+                    b.HasIndex("IdSintoma");
+
+                    b.ToTable("FichaDetalle", "DET");
+                });
+
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaSintoma", b =>
+                {
+                    b.Property<long>("IdFicha")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdFicha"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CodigoFicha")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("FechaEliminacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("HistoriaClinicaIdHistoriaClinica")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IpEliminacion")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.Property<string>("IpModificacion")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
+
+                    b.Property<string>("IpRegistro")
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
@@ -795,13 +744,9 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasKey("IdFicha");
 
-                    b.HasIndex("IdMascotas");
+                    b.HasIndex("HistoriaClinicaIdHistoriaClinica");
 
-                    b.HasIndex("IdResultado");
-
-                    b.HasIndex("IdUser");
-
-                    b.ToTable("FichaSintomas");
+                    b.ToTable("FichaSintoma", "DET");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.HistoriaClinica", b =>
@@ -815,10 +760,7 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Antecedentes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DiagnosticoGeneral")
+                    b.Property<string>("CodigoHistorial")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FechaEliminacion")
@@ -830,13 +772,7 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("IdMascotas")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdResultado")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdUser")
+                    b.Property<long>("IdMascotas")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IpEliminacion")
@@ -848,36 +784,6 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("IpRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("Recetas")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Seguimiento")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
@@ -897,27 +803,19 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasIndex("IdMascotas");
 
-                    b.HasIndex("IdResultado");
-
-                    b.HasIndex("IdUser");
-
-                    b.ToTable("HistoriaClinica");
+                    b.ToTable("HistoriaClinica", "DET");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Mascotas", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Mascota", b =>
                 {
-                    b.Property<long>("IdMascotas")
+                    b.Property<long>("IdMascota")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdMascotas"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdMascota"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Direccion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
 
                     b.Property<DateTime?>("FechaEliminacion")
                         .HasColumnType("datetime2");
@@ -931,7 +829,7 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("IdCliente")
+                    b.Property<long>("IdCliente")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IpEliminacion")
@@ -952,32 +850,8 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<string>("Raza")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
                     b.Property<string>("Sexo")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
@@ -991,11 +865,11 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.HasKey("IdMascotas");
+                    b.HasKey("IdMascota");
 
                     b.HasIndex("IdCliente");
 
-                    b.ToTable("Mascotas");
+                    b.ToTable("Mascotas", "CAT");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.Resultado", b =>
@@ -1012,9 +886,6 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("EnfermedadIdEnfermedad")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("FechaEliminacion")
                         .HasColumnType("datetime2");
 
@@ -1024,16 +895,10 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaResultado")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("FichaSintomaIdFicha")
+                    b.Property<long>("IdEnfermedad")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("IdEnfermedad")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("IdFicha")
+                    b.Property<long>("IdFicha")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IpEliminacion")
@@ -1045,33 +910,6 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("IpRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("Resultados")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
@@ -1089,20 +927,20 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasKey("IdResultado");
 
-                    b.HasIndex("EnfermedadIdEnfermedad");
+                    b.HasIndex("IdEnfermedad");
 
-                    b.HasIndex("FichaSintomaIdFicha");
+                    b.HasIndex("IdFicha");
 
-                    b.ToTable("Resultado");
+                    b.ToTable("Resultado", "DET");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Rol", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Sintoma", b =>
                 {
-                    b.Property<long>("IdRol")
+                    b.Property<long>("IdSintoma")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdRol"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdSintoma"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
@@ -1131,32 +969,8 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<string>("NombreRol")
+                    b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
 
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
@@ -1170,9 +984,9 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
 
-                    b.HasKey("IdRol");
+                    b.HasKey("IdSintoma");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Sintomas", "CAT");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.TipoEnfermedad", b =>
@@ -1188,6 +1002,9 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.Property<int>("ConteoDiagnosticoTipos")
                         .HasColumnType("int");
+
+                    b.Property<long?>("EnfermedadIdEnfermedad")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("FechaEliminacion")
                         .HasColumnType("datetime2");
@@ -1216,30 +1033,6 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Property<string>("NombreTipoEnfermedad")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
                     b.Property<string>("UsuarioEliminacion")
                         .HasMaxLength(350)
                         .HasColumnType("nvarchar(350)");
@@ -1254,181 +1047,9 @@ namespace ProyectoBaseNetCore.Migrations
 
                     b.HasKey("IdTipoEnfermedad");
 
-                    b.HasIndex("IdEnfermedad");
+                    b.HasIndex("EnfermedadIdEnfermedad");
 
-                    b.ToTable("TipoEnfermedad");
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.User", b =>
-                {
-                    b.Property<long>("IdUser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("IdUser"));
-
-                    b.Property<bool>("Activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Apellidos")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Contraseña")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Direccion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("FechaEliminacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IpEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("IpModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("IpRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("NombreUsuario")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nombres")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Rol")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.HasKey("IdUser");
-
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.UserRol", b =>
-                {
-                    b.Property<long?>("IdUser")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdRol")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("Activo")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("FechaEliminacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("FechaModificacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("IdUserRol")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("IpEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("IpModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("IpRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SesionRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("SistemaRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioEliminacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioModificacion")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.Property<string>("UsuarioRegistro")
-                        .HasMaxLength(350)
-                        .HasColumnType("nvarchar(350)");
-
-                    b.HasKey("IdUser", "IdRol");
-
-                    b.HasIndex("IdRol");
-
-                    b.ToTable("UserRol");
+                    b.ToTable("TipoEnfermedad", "CAT");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1480,15 +1101,6 @@ namespace ProyectoBaseNetCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Detalle", b =>
-                {
-                    b.HasOne("ProyectoBaseNetCore.Entities.FichaSintoma", "FichaSintomas")
-                        .WithMany("Detalles")
-                        .HasForeignKey("IdFicha");
-
-                    b.Navigation("FichaSintomas");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.DinamicQuestionEntities.CatalogItem", b =>
@@ -1561,53 +1173,50 @@ namespace ProyectoBaseNetCore.Migrations
                     b.Navigation("QuestionType");
                 });
 
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaDetalle", b =>
+                {
+                    b.HasOne("ProyectoBaseNetCore.Entities.FichaSintoma", "FichaSintoma")
+                        .WithMany("FichaDetalles")
+                        .HasForeignKey("IdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProyectoBaseNetCore.Entities.Sintoma", "Sintoma")
+                        .WithMany("FichaDetalles")
+                        .HasForeignKey("IdSintoma")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FichaSintoma");
+
+                    b.Navigation("Sintoma");
+                });
+
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaSintoma", b =>
                 {
-                    b.HasOne("ProyectoBaseNetCore.Entities.Mascotas", "Mascotas")
-                        .WithMany("FichaSintomas")
-                        .HasForeignKey("IdMascotas");
-
-                    b.HasOne("ProyectoBaseNetCore.Entities.Resultado", "Resultado")
-                        .WithMany("FichaSintomas")
-                        .HasForeignKey("IdResultado");
-
-                    b.HasOne("ProyectoBaseNetCore.Entities.User", "User")
-                        .WithMany("FichaSintomas")
-                        .HasForeignKey("IdUser");
-
-                    b.Navigation("Mascotas");
-
-                    b.Navigation("Resultado");
-
-                    b.Navigation("User");
+                    b.HasOne("ProyectoBaseNetCore.Entities.HistoriaClinica", null)
+                        .WithMany("FichasSintoma")
+                        .HasForeignKey("HistoriaClinicaIdHistoriaClinica");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.HistoriaClinica", b =>
                 {
-                    b.HasOne("ProyectoBaseNetCore.Entities.Mascotas", "Mascotas")
-                        .WithMany("HistoriaClinicas")
-                        .HasForeignKey("IdMascotas");
+                    b.HasOne("ProyectoBaseNetCore.Entities.Mascota", "Mascota")
+                        .WithMany()
+                        .HasForeignKey("IdMascotas")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ProyectoBaseNetCore.Entities.Resultado", "Resultado")
-                        .WithMany("HistoriaClinicas")
-                        .HasForeignKey("IdResultado");
-
-                    b.HasOne("ProyectoBaseNetCore.Entities.User", "User")
-                        .WithMany("HistoriaClinicas")
-                        .HasForeignKey("IdUser");
-
-                    b.Navigation("Mascotas");
-
-                    b.Navigation("Resultado");
-
-                    b.Navigation("User");
+                    b.Navigation("Mascota");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Mascotas", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Mascota", b =>
                 {
-                    b.HasOne("ProyectoBaseNetCore.Entities.Clientes", "Cliente")
+                    b.HasOne("ProyectoBaseNetCore.Entities.Cliente", "Cliente")
                         .WithMany("Mascotas")
-                        .HasForeignKey("IdCliente");
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Cliente");
                 });
@@ -1616,11 +1225,15 @@ namespace ProyectoBaseNetCore.Migrations
                 {
                     b.HasOne("ProyectoBaseNetCore.Entities.Enfermedad", "Enfermedad")
                         .WithMany("Resultados")
-                        .HasForeignKey("EnfermedadIdEnfermedad");
+                        .HasForeignKey("IdEnfermedad")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProyectoBaseNetCore.Entities.FichaSintoma", "FichaSintoma")
                         .WithMany()
-                        .HasForeignKey("FichaSintomaIdFicha");
+                        .HasForeignKey("IdFicha")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Enfermedad");
 
@@ -1630,32 +1243,13 @@ namespace ProyectoBaseNetCore.Migrations
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.TipoEnfermedad", b =>
                 {
                     b.HasOne("ProyectoBaseNetCore.Entities.Enfermedad", "Enfermedad")
-                        .WithMany("Tipos")
-                        .HasForeignKey("IdEnfermedad");
+                        .WithMany()
+                        .HasForeignKey("EnfermedadIdEnfermedad");
 
                     b.Navigation("Enfermedad");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.UserRol", b =>
-                {
-                    b.HasOne("ProyectoBaseNetCore.Entities.Rol", "Rol")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("IdRol")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoBaseNetCore.Entities.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Rol");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Clientes", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Cliente", b =>
                 {
                     b.Navigation("Mascotas");
                 });
@@ -1697,41 +1291,21 @@ namespace ProyectoBaseNetCore.Migrations
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.Enfermedad", b =>
                 {
                     b.Navigation("Resultados");
-
-                    b.Navigation("Tipos");
                 });
 
             modelBuilder.Entity("ProyectoBaseNetCore.Entities.FichaSintoma", b =>
                 {
-                    b.Navigation("Detalles");
+                    b.Navigation("FichaDetalles");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Mascotas", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.HistoriaClinica", b =>
                 {
-                    b.Navigation("FichaSintomas");
-
-                    b.Navigation("HistoriaClinicas");
+                    b.Navigation("FichasSintoma");
                 });
 
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Resultado", b =>
+            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Sintoma", b =>
                 {
-                    b.Navigation("FichaSintomas");
-
-                    b.Navigation("HistoriaClinicas");
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.Rol", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("ProyectoBaseNetCore.Entities.User", b =>
-                {
-                    b.Navigation("FichaSintomas");
-
-                    b.Navigation("HistoriaClinicas");
-
-                    b.Navigation("UserRoles");
+                    b.Navigation("FichaDetalles");
                 });
 #pragma warning restore 612, 618
         }

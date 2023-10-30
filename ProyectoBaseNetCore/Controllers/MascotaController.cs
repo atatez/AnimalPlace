@@ -2,16 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ProyectoBaseNetCore.DTOs;
 using ProyectoBaseNetCore.Entities;
 using ProyectoBaseNetCore.Services;
 
 namespace ProyectoBaseNetCore.Controllers
 {
     [ApiController]
-    [Route("api/Cliente/")]
+    [Route("api/Mascota/")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class ClienteController : Controller
+    public class MascotaController : Controller
     {
         private readonly IConfiguration configuration;
         private readonly IAuthorizationService authorizationService;
@@ -20,7 +19,7 @@ namespace ProyectoBaseNetCore.Controllers
         protected ClienteService _service;
         private readonly ApplicationDbContext _context;
 
-        public ClienteController(ApplicationDbContext context, 
+        public MascotaController(ApplicationDbContext context, 
             IConfiguration configuration, 
             IAuthorizationService Authorization, 
             UserManager<ApplicationUser> userManager, 
@@ -36,14 +35,14 @@ namespace ProyectoBaseNetCore.Controllers
             this._service = new ClienteService(_context,configuration, userName, ip);
         }
 
-        [HttpGet("ListarClientes")]
+        [HttpGet("Listar")]
         public async Task<IActionResult> GetCliente() =>Ok(await _service.GetCliente());
 
-        [HttpPost("NuevoCliente")]
-        public async Task<IActionResult> NuevoCliente(ClienteDTO Cliente) =>Ok(await _service.SaveCliente(Cliente));
+        [HttpPost("Crear")]
+        public async Task<IActionResult> NuevoCliente(ClienteViewModel Cliente) =>Ok(await _service.SaveCliente(Cliente));
           
 
-        [HttpDelete("EliminaCliente")]
+        [HttpDelete("Eliminar")]
         public async Task<IActionResult> EliminaCliente(long IdCliente) => Ok(await _service.DeleteCliente(IdCliente));
     }
 }

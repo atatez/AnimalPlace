@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProyectoBaseNetCore.Migrations
 {
     /// <inheritdoc />
-    public partial class vet001 : Migration
+    public partial class AnimalVet0001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "CAT");
+
+            migrationBuilder.EnsureSchema(
+                name: "DET");
 
             migrationBuilder.EnsureSchema(
                 name: "SEG");
@@ -33,6 +36,7 @@ namespace ProyectoBaseNetCore.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Clientes",
+                schema: "CAT",
                 columns: table => new
                 {
                     IdCliente = table.Column<long>(type: "bigint", nullable: false)
@@ -41,27 +45,72 @@ namespace ProyectoBaseNetCore.Migrations
                     Nombres = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Direccion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     Activo = table.Column<bool>(type: "bit", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SesionRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    SesionModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    SesionEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    SistemaEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    SistemaRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    SistemaModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clientes", x => x.IdCliente);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Codigos",
+                schema: "CAT",
+                columns: table => new
+                {
+                    IdCodigosSecuencia = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Codigo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UltimoNumero = table.Column<int>(type: "int", nullable: false),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Codigos", x => x.IdCodigosSecuencia);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enfermedad",
+                schema: "CAT",
+                columns: table => new
+                {
+                    IdEnfermedad = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodigoEnfermedads = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enfermedad", x => x.IdEnfermedad);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +174,31 @@ namespace ProyectoBaseNetCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sintomas",
+                schema: "CAT",
+                columns: table => new
+                {
+                    IdSintoma = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sintomas", x => x.IdSintoma);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 schema: "SEG",
                 columns: table => new
@@ -173,6 +247,74 @@ namespace ProyectoBaseNetCore.Migrations
                         principalSchema: "CAT",
                         principalTable: "Catalogs",
                         principalColumn: "IdCatalog");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Mascotas",
+                schema: "CAT",
+                columns: table => new
+                {
+                    IdMascota = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreMascota = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Raza = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sexo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdCliente = table.Column<long>(type: "bigint", nullable: false),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mascotas", x => x.IdMascota);
+                    table.ForeignKey(
+                        name: "FK_Mascotas_Clientes_IdCliente",
+                        column: x => x.IdCliente,
+                        principalSchema: "CAT",
+                        principalTable: "Clientes",
+                        principalColumn: "IdCliente",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TipoEnfermedad",
+                schema: "CAT",
+                columns: table => new
+                {
+                    IdTipoEnfermedad = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreTipoEnfermedad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConteoDiagnosticoTipos = table.Column<int>(type: "int", nullable: false),
+                    IdEnfermedad = table.Column<long>(type: "bigint", nullable: true),
+                    EnfermedadIdEnfermedad = table.Column<long>(type: "bigint", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoEnfermedad", x => x.IdTipoEnfermedad);
+                    table.ForeignKey(
+                        name: "FK_TipoEnfermedad_Enfermedad_EnfermedadIdEnfermedad",
+                        column: x => x.EnfermedadIdEnfermedad,
+                        principalSchema: "CAT",
+                        principalTable: "Enfermedad",
+                        principalColumn: "IdEnfermedad");
                 });
 
             migrationBuilder.CreateTable(
@@ -401,6 +543,146 @@ namespace ProyectoBaseNetCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FichaDetalle",
+                schema: "DET",
+                columns: table => new
+                {
+                    IdDetalle = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdFicha = table.Column<long>(type: "bigint", nullable: false),
+                    IdSintoma = table.Column<long>(type: "bigint", nullable: false),
+                    Observacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaDetalle", x => x.IdDetalle);
+                    table.ForeignKey(
+                        name: "FK_FichaDetalle_Sintomas_IdSintoma",
+                        column: x => x.IdSintoma,
+                        principalSchema: "CAT",
+                        principalTable: "Sintomas",
+                        principalColumn: "IdSintoma",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FichaSintoma",
+                schema: "DET",
+                columns: table => new
+                {
+                    IdFicha = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodigoFicha = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HistoriaClinicaIdHistoriaClinica = table.Column<long>(type: "bigint", nullable: true),
+                    ResultadoIdResultado = table.Column<long>(type: "bigint", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FichaSintoma", x => x.IdFicha);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Resultado",
+                schema: "DET",
+                columns: table => new
+                {
+                    IdResultado = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdFicha = table.Column<long>(type: "bigint", nullable: true),
+                    FichaSintomaIdFicha = table.Column<long>(type: "bigint", nullable: true),
+                    FechaResultado = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Resultados = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdEnfermedad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EnfermedadIdEnfermedad = table.Column<long>(type: "bigint", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resultado", x => x.IdResultado);
+                    table.ForeignKey(
+                        name: "FK_Resultado_Enfermedad_EnfermedadIdEnfermedad",
+                        column: x => x.EnfermedadIdEnfermedad,
+                        principalSchema: "CAT",
+                        principalTable: "Enfermedad",
+                        principalColumn: "IdEnfermedad");
+                    table.ForeignKey(
+                        name: "FK_Resultado_FichaSintoma_FichaSintomaIdFicha",
+                        column: x => x.FichaSintomaIdFicha,
+                        principalSchema: "DET",
+                        principalTable: "FichaSintoma",
+                        principalColumn: "IdFicha");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HistoriaClinica",
+                schema: "DET",
+                columns: table => new
+                {
+                    IdHistoriaClinica = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodigoHistorial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdMascotas = table.Column<long>(type: "bigint", nullable: false),
+                    ResultadoIdResultado = table.Column<long>(type: "bigint", nullable: true),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaModificacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FechaEliminacion = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IpRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    IpEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioRegistro = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    UsuarioEliminacion = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoriaClinica", x => x.IdHistoriaClinica);
+                    table.ForeignKey(
+                        name: "FK_HistoriaClinica_Mascotas_IdMascotas",
+                        column: x => x.IdMascotas,
+                        principalSchema: "CAT",
+                        principalTable: "Mascotas",
+                        principalColumn: "IdMascota",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HistoriaClinica_Resultado_ResultadoIdResultado",
+                        column: x => x.ResultadoIdResultado,
+                        principalSchema: "DET",
+                        principalTable: "Resultado",
+                        principalColumn: "IdResultado");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CatalogItems_IdCatalog",
                 schema: "CAT",
@@ -412,6 +694,30 @@ namespace ProyectoBaseNetCore.Migrations
                 schema: "CAT",
                 table: "CatalogItems",
                 column: "IdItem");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FichaDetalle_IdFicha",
+                schema: "DET",
+                table: "FichaDetalle",
+                column: "IdFicha");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FichaDetalle_IdSintoma",
+                schema: "DET",
+                table: "FichaDetalle",
+                column: "IdSintoma");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FichaSintoma_HistoriaClinicaIdHistoriaClinica",
+                schema: "DET",
+                table: "FichaSintoma",
+                column: "HistoriaClinicaIdHistoriaClinica");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FichaSintoma_ResultadoIdResultado",
+                schema: "DET",
+                table: "FichaSintoma",
+                column: "ResultadoIdResultado");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FormSectionQuestions_IdForm",
@@ -432,10 +738,28 @@ namespace ProyectoBaseNetCore.Migrations
                 column: "IdSection");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HistoriaClinica_IdMascotas",
+                schema: "DET",
+                table: "HistoriaClinica",
+                column: "IdMascotas");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoriaClinica_ResultadoIdResultado",
+                schema: "DET",
+                table: "HistoriaClinica",
+                column: "ResultadoIdResultado");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_CatalogIdCatalog",
                 schema: "CAT",
                 table: "Items",
                 column: "CatalogIdCatalog");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Mascotas_IdCliente",
+                schema: "CAT",
+                table: "Mascotas",
+                column: "IdCliente");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_IdCatalog",
@@ -450,6 +774,18 @@ namespace ProyectoBaseNetCore.Migrations
                 column: "IdQuestionType");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Resultado_EnfermedadIdEnfermedad",
+                schema: "DET",
+                table: "Resultado",
+                column: "EnfermedadIdEnfermedad");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resultado_FichaSintomaIdFicha",
+                schema: "DET",
+                table: "Resultado",
+                column: "FichaSintomaIdFicha");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 schema: "SEG",
                 table: "Role",
@@ -462,6 +798,12 @@ namespace ProyectoBaseNetCore.Migrations
                 schema: "SEG",
                 table: "RoleClaim",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TipoEnfermedad_EnfermedadIdEnfermedad",
+                schema: "CAT",
+                table: "TipoEnfermedad",
+                column: "EnfermedadIdEnfermedad");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaim_UserId",
@@ -494,17 +836,55 @@ namespace ProyectoBaseNetCore.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FichaDetalle_FichaSintoma_IdFicha",
+                schema: "DET",
+                table: "FichaDetalle",
+                column: "IdFicha",
+                principalSchema: "DET",
+                principalTable: "FichaSintoma",
+                principalColumn: "IdFicha",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FichaSintoma_HistoriaClinica_HistoriaClinicaIdHistoriaClinica",
+                schema: "DET",
+                table: "FichaSintoma",
+                column: "HistoriaClinicaIdHistoriaClinica",
+                principalSchema: "DET",
+                principalTable: "HistoriaClinica",
+                principalColumn: "IdHistoriaClinica");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_FichaSintoma_Resultado_ResultadoIdResultado",
+                schema: "DET",
+                table: "FichaSintoma",
+                column: "ResultadoIdResultado",
+                principalSchema: "DET",
+                principalTable: "Resultado",
+                principalColumn: "IdResultado");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Resultado_FichaSintoma_FichaSintomaIdFicha",
+                schema: "DET",
+                table: "Resultado");
+
             migrationBuilder.DropTable(
                 name: "CatalogItems",
                 schema: "CAT");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Codigos",
+                schema: "CAT");
+
+            migrationBuilder.DropTable(
+                name: "FichaDetalle",
+                schema: "DET");
 
             migrationBuilder.DropTable(
                 name: "FormSectionQuestions",
@@ -513,6 +893,10 @@ namespace ProyectoBaseNetCore.Migrations
             migrationBuilder.DropTable(
                 name: "RoleClaim",
                 schema: "SEG");
+
+            migrationBuilder.DropTable(
+                name: "TipoEnfermedad",
+                schema: "CAT");
 
             migrationBuilder.DropTable(
                 name: "UserClaim",
@@ -532,6 +916,10 @@ namespace ProyectoBaseNetCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items",
+                schema: "CAT");
+
+            migrationBuilder.DropTable(
+                name: "Sintomas",
                 schema: "CAT");
 
             migrationBuilder.DropTable(
@@ -560,6 +948,30 @@ namespace ProyectoBaseNetCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionTypes",
+                schema: "CAT");
+
+            migrationBuilder.DropTable(
+                name: "FichaSintoma",
+                schema: "DET");
+
+            migrationBuilder.DropTable(
+                name: "HistoriaClinica",
+                schema: "DET");
+
+            migrationBuilder.DropTable(
+                name: "Mascotas",
+                schema: "CAT");
+
+            migrationBuilder.DropTable(
+                name: "Resultado",
+                schema: "DET");
+
+            migrationBuilder.DropTable(
+                name: "Clientes",
+                schema: "CAT");
+
+            migrationBuilder.DropTable(
+                name: "Enfermedad",
                 schema: "CAT");
         }
     }

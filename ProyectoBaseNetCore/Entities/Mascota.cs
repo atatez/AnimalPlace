@@ -4,21 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoBaseNetCore.Entities
 {
-    public class Mascotas : CrudEntities
+    [Table("Mascotas", Schema = "CAT")]
+    public class Mascota : CrudEntities
     {
         [Key]
-        public long IdMascotas { get; set; }
-        public List<FichaSintoma> FichaSintomas { get; set; }
+        public long IdMascota { get; set; }
         public string NombreMascota { get; set; }
         public string Raza { get; set; }
         public string Sexo { get; set; }
         public DateTime FechaNacimiento { get; set; }
-
-        [MaxLength(350)]
-        public string Direccion { get; set; }
-        public long? IdCliente { get; set; }
-        public Clientes Cliente { get; set; }
-        public List<HistoriaClinica> HistoriaClinicas { get; set; }
-
+        [ForeignKey("Cliente")]
+        public long IdCliente { get; set; }
+        public virtual Cliente Cliente { get; set; }
     }
 }

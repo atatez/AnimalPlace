@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.EntityFrameworkCore;
-using ProyectoBaseNetCore.API.ViewModel;
-using ProyectoBaseNetCore.DTOs.SecurityDTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using ProyectoBaseNetCore.DTOs;
 using ProyectoBaseNetCore.Entities;
-using System.Security.Cryptography;
 
 namespace ProyectoBaseNetCore.Services
 {
@@ -11,100 +8,79 @@ namespace ProyectoBaseNetCore.Services
     {
         private static string _usuario;
         private static string _ip;
-
-        public ClienteService()
+        private readonly ApplicationDbContext _context;
+        private readonly IConfiguration configuration;
+        public ClienteService(ApplicationDbContext context, IConfiguration configuration, string ip, string usuario)
         {
-        }
-
-        public ClienteService(string usuario, string ip)
-        {
+            _context = context;
+            this.configuration = configuration;
             _ip = ip;
             _usuario = usuario;
         }
 
-        public async Task<List<ClienteViewModel>> GetCliente()
-        {
-            using (var contexto = new ApplicationDbContext())
+
+
+        public async Task<List<ClienteDTO>> GetCliente() => await _context.Cliente
+            .Where(x => x.Activo).Select(x => new ClienteDTO
             {
-                var query = await contexto.Clientes.Where(x => x.Activo).Select(x => new ClienteViewModel
-                {
-                    Identificacion = x.Identificacion,
-                    Nombres = x.Nombres,
-                    IdCliente = x.IdCliente,
-                    Direccion = x.Direccion,
-                    Telefono  = x.Telefono,
-                    Apellidos = x.Apellidos,
-                }).ToListAsync();
+                Identificacion = x.Identificacion,
+                Nombres = x.Nombres,
+                IdCliente = x.IdCliente,
+                Direccion = x.Direccion,
+                Telefono = x.Telefono,
+                Apellidos = x.Apellidos,
+            }).ToListAsync();
 
-                return query;
-            }
-        }
 
-        public async Task<ClienteViewModel> GetIdCliente(string Ruc)
-        {
-            using (var contexto = new ApplicationDbContext())
+        public async Task<ClienteDTO> GetIdCliente(string Ruc) => await _context.Cliente
+            .Where(x => x.Activo && x.Identificacion == Ruc).Select(x => new ClienteDTO
             {
-                var query = await contexto.Clientes.Where(x => x.Activo && x.Identificacion == Ruc).Select(x => new ClienteViewModel
-                {
-                    IdCliente = x.IdCliente,
-                    Identificacion = x.Identificacion,
-                    Nombres = x.Nombres,
-                    Apellidos= x.Apellidos,
-                    Direccion= x.Direccion,
-                    Telefono = x.Telefono,
-                }).FirstOrDefaultAsync();
+                IdCliente = x.IdCliente,
+                Identificacion = x.Identificacion,
+                Nombres = x.Nombres,
+                Apellidos = x.Apellidos,
+                Direccion = x.Direccion,
+                Telefono = x.Telefono,
+            }).FirstOrDefaultAsync();
 
-                return query;
-            }
-        }
-
-        public async Task<bool> SaveCliente(ClienteViewModel Cliente)
+        public async Task<bool> SaveCliente(ClienteDTO Cliente)
         {
             try
             {
-                using (var contexto = new ApplicationDbContext())
+
+                Cliente ClienteEncontrada = await _context.Cliente.Where(x => x.Identificacion == Cliente.Identificacion.Trim()).FirstOrDefaultAsync();
+                if (ClienteEncontrada == null)
                 {
-                    var ClienteEncontrada = await contexto.Clientes.Where(x => x.Activo && x.IdCliente == Cliente.IdCliente).FirstOrDefaultAsync();
-                    if (ClienteEncontrada == null)
-                    {
-                        Clientes NewCliente = new Clientes();
-                        NewCliente.Identificacion = Cliente.Identificacion;
-                        NewCliente.Nombres = Cliente.Nombres;
-                        NewCliente.IdCliente = Cliente.IdCliente;
-                        NewCliente.Apellidos = Cliente.Apellidos;
-                        NewCliente.Direccion = Cliente.Direccion;
-                        NewCliente.Telefono = Cliente.Telefono;
-                        NewCliente.Activo = true;
-                        NewCliente.FechaRegistro = DateTime.Now;
-                        NewCliente.UsuarioRegistro = _usuario;
-                        NewCliente.IpRegistro = _ip;
-                        NewCliente.SistemaRegistro = "Vet Animal";
-                        contexto.Clientes.Add(NewCliente);
-                        contexto.SaveChanges();
-                        return true;
-                    }
-                    else
-                    {
-                        ClienteEncontrada.Identificacion = Cliente.Identificacion;
-                        ClienteEncontrada.Nombres = Cliente.Nombres;
-                        ClienteEncontrada.Apellidos= Cliente.Apellidos;
-                        ClienteEncontrada.Direccion = Cliente.Direccion;
-                        ClienteEncontrada.Telefono = Cliente.Telefono;
-                        ClienteEncontrada.Activo = true;
-                        ClienteEncontrada.FechaModificacion = DateTime.Now;
-                        ClienteEncontrada.UsuarioModificacion = _usuario;
-                        ClienteEncontrada.IpModificacion = _ip;
-                        ClienteEncontrada.SistemaModificacion = "Vet Animal";
-
-                        contexto.SaveChanges();
-
-                        return true;
-                    }
+                    Cliente NewCliente = new Cliente();
+                    NewCliente.Identificacion = Cliente.Identificacion;
+                    NewCliente.Nombres = Cliente.Nombres;
+                    NewCliente.IdCliente = Cliente.IdCliente;
+                    NewCliente.Apellidos = Cliente.Apellidos;
+                    NewCliente.Direccion = Cliente.Direccion;
+                    NewCliente.Telefono = Cliente.Telefono;
+                    NewCliente.FechaRegistro = DateTime.Now;
+                    NewCliente.UsuarioRegistro = _usuario;
+                    NewCliente.IpRegistro = _ip;
+                    await _context.Cliente.AddAsync(NewCliente);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    ClienteEncontrada.Nombres = Cliente.Nombres;
+                    ClienteEncontrada.Apellidos = Cliente.Apellidos;
+                    ClienteEncontrada.Direccion = Cliente.Direccion;
+                    ClienteEncontrada.Telefono = Cliente.Telefono;
+                    ClienteEncontrada.FechaModificacion = DateTime.Now;
+                    ClienteEncontrada.UsuarioModificacion = _usuario;
+                    ClienteEncontrada.IpModificacion = _ip;
+                    await _context.SaveChangesAsync();
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                throw;
             }
         }
 
@@ -112,28 +88,24 @@ namespace ProyectoBaseNetCore.Services
         {
             try
             {
-                using (var contexto = new ApplicationDbContext())
+                var ClienteEncontrada = await _context.Cliente.FindAsync(IdCliente);
+                if (ClienteEncontrada != null)
                 {
-                    var ClienteEncontrada = await contexto.Clientes.Where(x => x.Activo && x.IdCliente == IdCliente).FirstOrDefaultAsync();
-                    if (ClienteEncontrada != null)
-                    {
-                        ClienteEncontrada.Activo = false;
-                        ClienteEncontrada.FechaEliminacion = DateTime.Now;
-                        ClienteEncontrada.UsuarioEliminacion = _usuario;
-                        ClienteEncontrada.IpEliminacion = _ip;
-                        ClienteEncontrada.SistemaEliminacion = "Vet Animal";
-                        contexto.SaveChanges();
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    ClienteEncontrada.Activo = false;
+                    ClienteEncontrada.FechaEliminacion = DateTime.Now;
+                    ClienteEncontrada.UsuarioEliminacion = _usuario;
+                    ClienteEncontrada.IpEliminacion = _ip;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                throw;
             }
         }
     }

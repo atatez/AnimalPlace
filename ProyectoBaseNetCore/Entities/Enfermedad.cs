@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoBaseNetCore.Entities
 {
+    [Table("Enfermedad",Schema ="CAT")]
     public class Enfermedad : CrudEntities
     {
         [Key]
         public long IdEnfermedad { get; set; }
-        public string NombreEnfermedad { get; set; }
-        public int ConteoDiagnosticoEnfermedad { get; set; }    ///Un campo numérico que se utiliza para llevar un registro del número de diagnósticos generales realizados para esta enfermedad.
-
-        public DateTime FechaUltimoDiagn { get; set; }
-
-        public List<TipoEnfermedad> Tipos { get; set; }
-        public List<Resultado> Resultados { get; set; }
+        public string CodigoEnfermedad { get; set; }
+        public string Nombre { get; set; }
+        public virtual ICollection<Resultado> Resultados { get; set; }
     }
 }
