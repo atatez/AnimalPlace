@@ -17,9 +17,6 @@ namespace ProyectoBaseNetCore.Services
             _ip = ip;
             _usuario = usuario;
         }
-
-
-
         public async Task<List<ClienteDTO>> GetCliente() => await _context.Cliente
             .Where(x => x.Activo).Select(x => new ClienteDTO
             {

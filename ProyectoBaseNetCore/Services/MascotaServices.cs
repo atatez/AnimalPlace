@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProyectoBaseNetCore.API.ViewModel;
+using ProyectoBaseNetCore.DTOs;
 using ProyectoBaseNetCore.Entities;
 
 namespace ProyectoBaseNetCore.Services
@@ -20,70 +20,64 @@ namespace ProyectoBaseNetCore.Services
 
        
 
-        public async Task<List<ClienteViewModel>> GetAllMascotasAsync()
-        {
-                var query = await _context.Mascota.Where(x => x.Activo).Select(x => new ClienteViewModel
+        public async Task<List<MascotaDTO>> GetAllMascotasAsync() => await _context.Mascota
+            .Where(x => x.Activo).Select(x => new MascotaDTO
                 {
-                    Identificacion = x.Identificacion,
-                    Nombres = x.Nombres,
+                    IdMascota = x.IdMascota,
+                    NombreMascota= x.NombreMascota,
                     IdCliente = x.IdCliente,
-                    Direccion = x.Direccion,
-                    Telefono  = x.Telefono,
-                    Apellidos = x.Apellidos,
+                    Cliente = x.Cliente.Nombres,
+                    Raza  = x.Raza,
+                    Sexo = x.Sexo,
+                    FechaNacimiento = x.FechaNacimiento,
                 }).ToListAsync();
 
-                return query;
-        }
 
-        public async Task<ClienteViewModel> GetIdCliente(string Ruc)
-        {
-                var query = await _context.Cliente.Where(x => x.Activo && x.Identificacion == Ruc).Select(x => new ClienteViewModel
+        public async Task<MascotaDTO> GetIdMascota(long IdMascota) => await _context.Mascota.Where(x => x.Activo && x.IdMascota == IdMascota).Select(x => new MascotaDTO
                 {
+                    IdMascota = x.IdMascota,
+                    NombreMascota = x.NombreMascota,
                     IdCliente = x.IdCliente,
-                    Identificacion = x.Identificacion,
-                    Nombres = x.Nombres,
-                    Apellidos= x.Apellidos,
-                    Direccion= x.Direccion,
-                    Telefono = x.Telefono,
+                    Cliente = x.Cliente.Nombres,
+                    Raza = x.Raza,
+                    Sexo = x.Sexo,
+                    FechaNacimiento = x.FechaNacimiento,
                 }).FirstOrDefaultAsync();
 
-                return query;
-        }
-
-        public async Task<bool> SaveCliente(ClienteViewModel Cliente)
+        public async Task<bool> SaveMascota(MascotaDTO Data)
         {
             try
             {
                 
-                    var ClienteEncontrada = await _context.Cliente.Where(x => x.Activo && x.IdCliente == Cliente.IdCliente).FirstOrDefaultAsync();
-                    if (ClienteEncontrada == null)
+                    var CurrentPet = await _context.Mascota
+                    .Where(x => x.Activo && x.NombreMascota == Data.NombreMascota).FirstOrDefaultAsync();
+                    if (CurrentPet == null)
                     {
-                        Cliente NewCliente = new Cliente();
-                        NewCliente.Identificacion = Cliente.Identificacion;
-                        NewCliente.Nombres = Cliente.Nombres;
-                        NewCliente.IdCliente = Cliente.IdCliente;
-                        NewCliente.Apellidos = Cliente.Apellidos;
-                        NewCliente.Direccion = Cliente.Direccion;
-                        NewCliente.Telefono = Cliente.Telefono;
-                        NewCliente.Activo = true;
-                        NewCliente.FechaRegistro = DateTime.Now;
-                        NewCliente.UsuarioRegistro = _usuario;
-                        NewCliente.IpRegistro = _ip;
-                        _context.Cliente.Add(NewCliente);
-                        _context.SaveChanges();
+                        Mascota NewPet = new Mascota();
+                        NewPet.NombreMascota = Data.NombreMascota;
+                        NewPet.IdCliente = Data.IdCliente;
+                        NewPet.Raza = Data.Raza;
+                        NewPet.FechaNacimiento = Data.FechaNacimiento;
+                        NewPet.Sexo = Data.Sexo;
+                        NewPet.Activo = true;
+                        NewPet.FechaRegistro = DateTime.Now;
+                        NewPet.UsuarioRegistro = _usuario;
+                        NewPet.IpRegistro = _ip;
+                        await _context.Mascota.AddAsync(NewPet);
+                        await _context.SaveChangesAsync();
                         return true;
                     }
                     else
                     {
-                        ClienteEncontrada.Identificacion = Cliente.Identificacion;
-                        ClienteEncontrada.Nombres = Cliente.Nombres;
-                        ClienteEncontrada.Apellidos= Cliente.Apellidos;
-                        ClienteEncontrada.Direccion = Cliente.Direccion;
-                        ClienteEncontrada.Telefono = Cliente.Telefono;
-                        ClienteEncontrada.Activo = true;
-                        ClienteEncontrada.FechaModificacion = DateTime.Now;
-                        ClienteEncontrada.UsuarioModificacion = _usuario;
-                        ClienteEncontrada.IpModificacion = _ip;
+                        CurrentPet.NombreMascota = Data.NombreMascota;
+                        CurrentPet.IdCliente = Data.IdCliente;
+                        CurrentPet.Raza = Data.Raza;
+                        CurrentPet.FechaNacimiento = Data.FechaNacimiento;
+                        CurrentPet.Sexo = Data.Sexo;
+                        CurrentPet.Activo = true;
+                        CurrentPet.FechaModificacion = DateTime.Now;
+                        CurrentPet.UsuarioModificacion = _usuario;
+                        CurrentPet.IpModificacion = _ip;
                         _context.SaveChanges();
 
                         return true;
@@ -95,18 +89,18 @@ namespace ProyectoBaseNetCore.Services
             }
         }
 
-        public async Task<bool> DeleteCliente(long IdCliente)
+        public async Task<bool> DeleteMascota(long IdCliente)
         {
             try
             {
-                    var ClienteEncontrada = await _context.Cliente.Where(x => x.Activo && x.IdCliente == IdCliente).FirstOrDefaultAsync();
-                    if (ClienteEncontrada != null)
+                    var CurrentPet = await _context.Mascota.FindAsync(IdCliente);
+                    if (CurrentPet != null)
                     {
-                        ClienteEncontrada.Activo = false;
-                        ClienteEncontrada.FechaEliminacion = DateTime.Now;
-                        ClienteEncontrada.UsuarioEliminacion = _usuario;
-                        ClienteEncontrada.IpEliminacion = _ip;
-                        _context.SaveChanges();
+                        CurrentPet.Activo = false;
+                        CurrentPet.FechaEliminacion = DateTime.Now;
+                        CurrentPet.UsuarioEliminacion = _usuario;
+                        CurrentPet.IpEliminacion = _ip;
+                        await _context.SaveChangesAsync();
                         return true;
                     }
                     else
