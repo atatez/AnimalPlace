@@ -4,7 +4,10 @@ using System.Text;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.IO;
-
+using ProyectoBaseNetCore.Entities;
+using Microsoft.AspNetCore.Http;
+using static NPOI.HSSF.Util.HSSFColor;
+using System;
 
 namespace ProyectoBaseNetCore.Services
 {
@@ -15,14 +18,14 @@ namespace ProyectoBaseNetCore.Services
         private static string _ip;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration configuration;
-        public SyncServices(ApplicationDbContext context, IConfiguration configuration, string ip, string usuario)
+        public SyncServices(ApplicationDbContext context, IConfiguration configuration, string usuario, string ip)
         {
             _context = context;
             this.configuration = configuration;
             _ip = ip;
             _usuario = usuario;
         }
-        public async Task<ImportResponseDTO> MultipleCheckList(IFormFile file)
+        public async Task<ImportResponseDTO> SyncClientsAndPets(IFormFile file)
         {
             try
             {
@@ -51,7 +54,12 @@ namespace ProyectoBaseNetCore.Services
 
                     if (excelRow != null)
                     {
+
                         string CodigoC = excelRow.GetCell(0)?.ToString();
+                        if (CodigoC.Equals("Cl-119"))
+                        {
+                            var x = 1;
+                        }
                         string Nombres = excelRow.GetCell(1)?.ToString();
                         string Cedula = excelRow.GetCell(2)?.ToString();
                         string Direccion = excelRow.GetCell(3)?.ToString();
@@ -60,26 +68,26 @@ namespace ProyectoBaseNetCore.Services
                         string CodigoM = excelRow.GetCell(6)?.ToString();
                         string NombreM = excelRow.GetCell(7)?.ToString();
                         string Raza = excelRow.GetCell(8)?.ToString();
-                        string Peso = excelRow.GetCell(9)?.ToString();
+                        float Peso = float.Parse(excelRow.GetCell(9)?.ToString()??"0");
                         string Sexo = excelRow.GetCell(10)?.ToString();
-                        string FNac = excelRow.GetCell(11)?.ToString();
+                        DateTime? FNac = excelRow.GetCell(11)?.ToString() != null ? DateTime.Parse(excelRow.GetCell(11)?.ToString()) :null;
 
                         // Realizar validaciones y procesamiento de datos de acuerdo a tus requisitos
                         if (string.IsNullOrEmpty(Cedula) || Cedula.Length < 10)
                         {
                             hasError = true;
-                            messageError.AppendLine($"Error fila {row +1}: No se ha proporcionado un Número de cedula o la cedula {Cedula} es inválida.");
+                            messageError.AppendLine($"Error fila {row + 1}: No se ha proporcionado un Número de cedula o la cedula {Cedula} es inválida.");
                         }
 
                         if (string.IsNullOrEmpty(Nombres) || Nombres.Length < 3)
                         {
                             hasError = true;
-                            messageError.AppendLine($"Error fila {row +1}: No se ha proporcionado un Nombre o {Nombres} no es válido.");
+                            messageError.AppendLine($"Error fila {row + 1}: No se ha proporcionado un Nombre o {Nombres} no es válido.");
                         }
                         if (string.IsNullOrEmpty(Direccion) || Direccion.Length < 3)
                         {
                             hasError = true;
-                            messageError.AppendLine($"Error fila {row +1}: No se ha proporcionado una Direccion o  {Direccion} no es válido.");
+                            messageError.AppendLine($"Error fila {row + 1}: No se ha proporcionado una Direccion o  {Direccion} no es válido.");
                         }
                         if (string.IsNullOrEmpty(Celular) || Celular.Length < 10)
                         {
@@ -96,7 +104,99 @@ namespace ProyectoBaseNetCore.Services
                             hasError = true;
                             messageError.AppendLine($"Error fila {row + 1}: No se ha proporcionado la raza o  {Raza} no es válido.");
                         }
-                        // Continúa procesando las demás columnas y aplicando tus lógicas
+                        if (!hasError)
+                        {
+                            var Cliente = await _context.Cliente.Where(c => c.Identificacion.Equals(Cedula)).FirstOrDefaultAsync();
+                            if (Cliente == null)
+                            {
+                               
+                                var nuevo = new Cliente
+                                {
+                                    Identificacion = Cedula,
+                                    Codigo = CodigoC,
+                                    Nombres = Nombres,
+                                    Correo = Correo,
+                                    Direccion = Direccion,
+                                    Telefono = Celular,
+                                    Activo = true,
+                                    UsuarioRegistro = _usuario,
+                                    IpRegistro = _ip,
+                                    FechaRegistro = DateTime.Now,
+                                    Mascotas = new List<Mascota> {
+                                        new Mascota
+                                        {
+                                            Codigo = CodigoM,
+                                            NombreMascota = NombreM,
+                                            Raza= Raza,
+                                            Sexo = Sexo,
+                                            FechaNacimiento = FNac,
+                                            Peso = Peso,
+                                            Activo = true,
+                                            UsuarioRegistro = _usuario,
+                                            IpRegistro = _ip,
+                                            FechaRegistro = DateTime.Now,
+                                        }
+                                    }
+                                };
+                                await _context.Cliente.AddAsync(nuevo);
+                            }
+                            else
+                            {
+                                if (CodigoC.Equals("Cl-047"))
+                                {
+                                    var x = 1;
+                                }
+                                Cliente.Identificacion = Cedula;
+                                Cliente.Codigo = CodigoC;
+                                Cliente.Nombres = Nombres;
+                                Cliente.Correo = Correo;
+                                Cliente.Direccion = Direccion;
+                                Cliente.Telefono = Celular;
+                                Cliente.Activo = true;
+                                Cliente.UsuarioModificacion = _usuario;
+                                Cliente.IpModificacion = _ip;
+                                Cliente.FechaModificacion = DateTime.Now;
+                                var FMascota = await _context.Mascota.Where(m =>  m.Codigo == CodigoM && m.IdCliente == Cliente.IdCliente).FirstOrDefaultAsync();
+                                if (FMascota == null)
+                                {
+                                    var NMascota = new Mascota
+                                    {
+                                        IdCliente = Cliente.IdCliente,
+                                        Codigo = CodigoM,
+                                        NombreMascota = NombreM,
+                                        Raza = Raza,
+                                        Sexo = Sexo,
+                                        FechaNacimiento = FNac,
+                                        Peso = Peso,
+                                        Activo = true,
+                                        UsuarioRegistro = _usuario,
+                                        IpRegistro = _ip,
+                                        FechaRegistro = DateTime.Now,
+                                    };
+                                    await _context.Mascota.AddAsync(NMascota);
+
+                                }else
+                                {
+                                    FMascota.Codigo = CodigoM;
+                                    FMascota.NombreMascota = NombreM;
+                                    FMascota.Raza = Raza;
+                                    FMascota.Sexo = Sexo;
+                                    FMascota.FechaNacimiento = FNac;
+                                    FMascota.Peso = Peso;
+                                    FMascota.Activo = true;
+                                    FMascota.UsuarioModificacion = _usuario;
+                                    FMascota.IpModificacion = _ip;
+                                    FMascota.FechaModificacion = DateTime.Now;
+                                }
+
+                            }
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        hasError = true;
+                        messageError.AppendLine($"Error fila {row - 1}: El registro no se creó.");
                     }
                 }
 
@@ -108,7 +208,7 @@ namespace ProyectoBaseNetCore.Services
             }
             catch (DbUpdateException ex)
             {
-                throw new Exception(ex.InnerException.Message);
+                throw;
             }
         }
 

@@ -9,10 +9,12 @@ namespace ProyectoBaseNetCore.Entities
     {
         [Key]
         public long IdMascota { get; set; }
+        public string Codigo { get; set; }
         public string NombreMascota { get; set; }
         public string Raza { get; set; }
         public string Sexo { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        public float? Peso { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         [ForeignKey("Cliente")]
         public long IdCliente { get; set; }
         public virtual Cliente Cliente { get; set; }

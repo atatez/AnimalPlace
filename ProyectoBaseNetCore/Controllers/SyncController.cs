@@ -44,7 +44,7 @@ namespace ProyectoBaseNetCore.Controllers
         [HttpPost("Catalogos")]
         public async Task<IActionResult> SyncCatalogos([FromForm] IFormCollection formCollection) =>
             formCollection.Files.Count > 0 && formCollection.Files[0].Length > 0 ?
-            Ok(await _service.MultipleCheckList(formCollection.Files[0])) :
+            Ok(await _service.SyncClientsAndPets(formCollection.Files[0])) :
             Ok(new ImportResponseDTO());
 
         
