@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoBaseNetCore.DTOs;
 using ProyectoBaseNetCore.Entities;
+using ProyectoBaseNetCore.Models;
 using ProyectoBaseNetCore.Services;
 
 namespace ProyectoBaseNetCore.Controllers
@@ -40,10 +41,10 @@ namespace ProyectoBaseNetCore.Controllers
         public async Task<IActionResult> GetCliente() =>Ok(await _service.GetCliente());
 
         [HttpPost("NuevoCliente")]
-        public async Task<IActionResult> NuevoCliente(ClienteDTO Cliente) =>Ok(await _service.SaveCliente(Cliente));
+        public async Task<IActionResult> NuevoCliente(GuardarClienteViewModel Cliente) =>Ok(await _service.SaveCliente(Cliente));
           
 
-        [HttpDelete("EliminaCliente")]
+        [HttpPost("EliminaCliente")]
         public async Task<IActionResult> EliminaCliente(long IdCliente) => Ok(await _service.DeleteCliente(IdCliente));
     }
 }

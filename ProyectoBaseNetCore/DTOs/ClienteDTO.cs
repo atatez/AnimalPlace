@@ -4,13 +4,13 @@ namespace ProyectoBaseNetCore.DTOs
 {
     public class ClienteDTO
     {
-        public long IdCliente { get; set; }
-        public string Identificacion { get; set; }
-        public string Nombres { get; set; }
-        public string Telefono { get; set; }
-        public string Correo { get; set; }
+        public long idCliente { get; set; }
+        public string identificacion { get; set; }
+        public string nombres { get; set; }
+        public string telefono { get; set; }
+        public string correo { get; set; }
         [MaxLength(350)]
-        public string Direccion { get; set; }
+        public string direccion { get; set; }
     }
     
 }

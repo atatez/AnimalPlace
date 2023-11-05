@@ -1,15 +1,18 @@
-﻿namespace ProyectoBaseNetCore.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProyectoBaseNetCore.Models
 {
     public class GuardarClienteViewModel
     {
-        public long IdCliente { get; set; }
-        public string Codigo { get; set; }
-        public string Identificacion { get; set; }
-        public string Nombres { get; set; }
-        public string Telefono { get; set; }
-        public string Correo { get; set; }
-        
-        public string Direccion { get; set; }
-       
+     
+
+        public long idCliente { get; set; }
+        public string identificacion { get; set; }
+        public string nombres { get; set; }
+        public string telefono { get; set; }
+        public string correo { get; set; }
+        [MaxLength(350)]
+        public string direccion { get; set; }
+
     }
 }
