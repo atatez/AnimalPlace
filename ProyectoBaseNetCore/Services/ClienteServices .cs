@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoBaseNetCore.DTOs;
 using ProyectoBaseNetCore.Entities;
+using ProyectoBaseNetCore.Models;
 
 namespace ProyectoBaseNetCore.Services
 {
@@ -25,7 +26,7 @@ namespace ProyectoBaseNetCore.Services
                 IdCliente = x.IdCliente,
                 Direccion = x.Direccion,
                 Telefono = x.Telefono,
-                Apellidos = x.Codigo,
+                //Apellidos = x.Codigo,
             }).ToListAsync();
 
 
@@ -35,7 +36,7 @@ namespace ProyectoBaseNetCore.Services
                 IdCliente = x.IdCliente,
                 Identificacion = x.Identificacion,
                 Nombres = x.Nombres,
-                Apellidos = x.Codigo,
+                //Apellidos = x.Codigo,
                 Direccion = x.Direccion,
                 Telefono = x.Telefono,
             }).FirstOrDefaultAsync();
@@ -52,7 +53,7 @@ namespace ProyectoBaseNetCore.Services
                     NewCliente.Identificacion = Cliente.Identificacion;
                     NewCliente.Nombres = Cliente.Nombres;
                     NewCliente.IdCliente = Cliente.IdCliente;
-                    NewCliente.Codigo = Cliente.Apellidos;
+                    //NewCliente.Codigo = Cliente.Apellidos;
                     NewCliente.Direccion = Cliente.Direccion;
                     NewCliente.Telefono = Cliente.Telefono;
                     NewCliente.FechaRegistro = DateTime.Now;
@@ -65,7 +66,7 @@ namespace ProyectoBaseNetCore.Services
                 else
                 {
                     ClienteEncontrada.Nombres = Cliente.Nombres;
-                    ClienteEncontrada.Codigo = Cliente.Apellidos;
+                    //ClienteEncontrada.Codigo = Cliente.Apellidos;
                     ClienteEncontrada.Direccion = Cliente.Direccion;
                     ClienteEncontrada.Telefono = Cliente.Telefono;
                     ClienteEncontrada.FechaModificacion = DateTime.Now;
@@ -80,6 +81,51 @@ namespace ProyectoBaseNetCore.Services
                 throw;
             }
         }
+
+
+        //public Task<List<GuardarClienteViewModel>> GuardarCliente(GuardarClienteViewModel guardar)
+        //{
+
+        //    try
+        //    {
+        //        Cliente ClienteEncontrada = await _context.Cliente.Where(x => x.Identificacion == Cliente.Identificacion.Trim()).FirstOrDefaultAsync();
+        //        if (ClienteEncontrada == null)
+        //        {
+        //            Cliente NewCliente = new Cliente();
+        //            NewCliente.Identificacion = Cliente.Identificacion;
+        //            NewCliente.Nombres = Cliente.Nombres;
+        //            NewCliente.IdCliente = Cliente.IdCliente;
+        //            NewCliente.Codigo = Cliente.Apellidos;
+        //            NewCliente.Direccion = Cliente.Direccion;
+        //            NewCliente.Telefono = Cliente.Telefono;
+        //            NewCliente.FechaRegistro = DateTime.Now;
+        //            NewCliente.UsuarioRegistro = _usuario;
+        //            NewCliente.IpRegistro = _ip;
+        //            await _context.Cliente.AddAsync(NewCliente);
+        //            await _context.SaveChangesAsync();
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            ClienteEncontrada.Nombres = Cliente.Nombres;
+        //            ClienteEncontrada.Codigo = Cliente.Apellidos;
+        //            ClienteEncontrada.Direccion = Cliente.Direccion;
+        //            ClienteEncontrada.Telefono = Cliente.Telefono;
+        //            ClienteEncontrada.FechaModificacion = DateTime.Now;
+        //            ClienteEncontrada.UsuarioModificacion = _usuario;
+        //            ClienteEncontrada.IpModificacion = _ip;
+        //            await _context.SaveChangesAsync();
+        //            return true;
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+  
 
         public async Task<bool> DeleteCliente(long IdCliente)
         {

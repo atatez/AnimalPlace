@@ -10,6 +10,7 @@ using ProyectoBaseNetCore.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TMS_MANTENIMIENTO.API.DTOs;
 
 namespace ProyectoBaseNetCore.Controllers
 {
@@ -38,7 +39,7 @@ namespace ProyectoBaseNetCore.Controllers
             dataProtector = dataProtectionProvider.CreateProtector(JWTKey);
         }
 
-        [HttpGet("Encrypt")]
+        [HttpGet("encriptar")]
         public ActionResult Encriptar()
         {
             var textoPlano = "Geovanny Andrade";
@@ -52,7 +53,7 @@ namespace ProyectoBaseNetCore.Controllers
             });
         }
 
-        [HttpGet("EncryptByTime")]
+        [HttpGet("encriptarPorTiempo")]
         public ActionResult EncriptarPorTiempo()
         {
             var protectoLimitadoPorTiempo = dataProtector.ToTimeLimitedDataProtector();
@@ -82,32 +83,40 @@ namespace ProyectoBaseNetCore.Controllers
             });
         }
 
-        [HttpPost("Register")]
-        public async Task<ActionResult<AuthenticationResponse>> Registrar(DTOs.SecurityDTOs.RegisterInfo registerInfo)
+        [HttpPost("registrar", Name = "registrarUsuario")]
+        public async Task<ActionResult<RespuestaAutenticacion>> Registrar(CredencialesUsuario credencialesUsuario)
         {
-            var user = new ApplicationUser { UserName = registerInfo.Username, Email = registerInfo.Email };
-            var result = await userManager.CreateAsync(user, registerInfo.Password);
+            try
+            {
+                var usuario = new ApplicationUser { UserName = credencialesUsuario.Email, Email = credencialesUsuario.Email };
+                usuario.FirstName = credencialesUsuario.Email;
+                var resultado = await userManager.CreateAsync(usuario, credencialesUsuario.Password);
 
-            if (result.Succeeded)
-            {
-                return await CreateToken(registerInfo.Username);
+                if (resultado.Succeeded)
+                {
+                    return await ConstruirToken(credencialesUsuario);
+                }
+                else
+                {
+                    return BadRequest(resultado.Errors);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(e.InnerException);
             }
         }
 
-        [HttpPost("Login")]
-        public async Task<ActionResult<AuthenticationResponse>> Login(DTOs.SecurityDTOs.UserLoginInfo userLoginInfo)
+        [HttpPost("login", Name = "loginUsuario")]
+        public async Task<ActionResult<RespuestaAutenticacion>> Login(CredencialesUsuario credencialesUsuario)
         {
-            var result = await signInManager.PasswordSignInAsync(userLoginInfo.Username,
-                                                                    userLoginInfo.Password,
+            var resultado = await signInManager.PasswordSignInAsync(credencialesUsuario.Email,
+                                                                    credencialesUsuario.Password,
                                                                     isPersistent: false,
                                                                     lockoutOnFailure: false);
-            if (result.Succeeded)
+            if (resultado.Succeeded)
             {
-                return await CreateToken(userLoginInfo.Username);
+                return await ConstruirToken(credencialesUsuario);
             }
             else
             {
@@ -115,39 +124,61 @@ namespace ProyectoBaseNetCore.Controllers
             }
         }
 
-        [HttpGet("RenewToken")]
+        [HttpGet("RenovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<AuthenticationResponse>> Renovar()
+        public async Task<ActionResult<RespuestaAutenticacion>> Renovar()
         {
             var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
             var email = emailClaim.Value;
-            return await CreateToken(email);
+
+            var credencialesUsuario = new CredencialesUsuario()
+            {
+                Email = email,
+            };
+
+            return await ConstruirToken(credencialesUsuario);
         }
 
         //Generar Hash y Token
-        private async Task<AuthenticationResponse> CreateToken(string username)
+        private async Task<RespuestaAutenticacion> ConstruirToken(CredencialesUsuario credencialesUsuario)
         {
             var claims = new List<Claim>()
             {
-                new Claim("email", username),
+                new Claim("email", credencialesUsuario.Email),
             };
 
-            var user = await userManager.FindByNameAsync(username);
-            var claimsDB = await userManager.GetClaimsAsync(user);
+            var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);
+            var claimsDB = await userManager.GetClaimsAsync(usuario);
 
             claims.AddRange(claimsDB);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWTKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddYears(1);
+            var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTKey"]));
+            var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
+            var expiracion = DateTime.UtcNow.AddYears(1);
 
-            var securtityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiration, signingCredentials: creds);
+            var securtityToken = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiracion, signingCredentials: creds);
 
-            return new AuthenticationResponse()
+            return new RespuestaAutenticacion()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(securtityToken),
-                Expiracion = expiration,
+                Expiracion = expiracion,
             };
+        }
+
+        [HttpPost("HacerAdmin")]
+        public async Task<ActionResult> HacerAdmin(EditarAdminDTO editarAdminDTO)
+        {
+            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
+            await userManager.AddClaimAsync(usuario, new Claim("esAdmin", "1"));
+            return NoContent();
+        }
+
+        [HttpPost("RemoverAdmin")]
+        public async Task<ActionResult> RemoverAdmin(EditarAdminDTO editarAdminDTO)
+        {
+            var usuario = await userManager.FindByEmailAsync(editarAdminDTO.Email);
+            await userManager.RemoveClaimAsync(usuario, new Claim("esAdmin", "1"));
+            return NoContent();
         }
 
         [HttpGet("ValidateToken")]
@@ -174,7 +205,7 @@ namespace ProyectoBaseNetCore.Controllers
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(JWTKey);
+            var key = Encoding.ASCII.GetBytes(configuration["llavejwt"]);
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -201,9 +232,9 @@ namespace ProyectoBaseNetCore.Controllers
         }
 
         [HttpPost("ChangePassword")]
-        public async Task<ActionResult> ChangePassword(DTOs.SecurityDTOs.UserLoginInfo credencialesUsuario)
+        public async Task<ActionResult> ChangePassword(CredencialesUsuario credencialesUsuario)
         {
-            ApplicationUser user = await userManager.FindByNameAsync(credencialesUsuario.Username);
+            ApplicationUser user = await userManager.FindByEmailAsync(credencialesUsuario.Email);
             if (user == null)
             {
                 return NotFound();
@@ -213,6 +244,7 @@ namespace ProyectoBaseNetCore.Controllers
             if (!result.Succeeded)
             {
                 return BadRequest("Ocurrio un error al cmabiar su contraseña");
+                //throw exception......
             }
             return Ok("Contraseña actualizada con exito!");
         }
